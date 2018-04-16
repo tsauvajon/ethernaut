@@ -8,13 +8,12 @@ contract CoinFlipWinner {
     uint256 public consecutiveWins;
     uint256 lastHash;
     uint256 FACTOR = 57896044618658097711785492504343953926634992332820282019728792003956564819968;
-    CoinFlip cf = CoinFlip(0x1ceb1555c9d37d17f58a92cc7850973776fc14f0);
     
     function CoinFlipWinner() public {
         consecutiveWins = 0;
     }
 
-    function flip() public returns (bool) {
+    function flip(address _coinflip) public returns (bool) {
         uint256 blockValue = uint256(block.blockhash(block.number-1));
         
         if (lastHash == blockValue) {
@@ -25,6 +24,7 @@ contract CoinFlipWinner {
         uint256 coinFlip = uint256(uint256(blockValue) / FACTOR);
         bool side = coinFlip == 1 ? true : false;
         
+        CoinFlip cf = CoinFlip(_coinflip);
         cf.flip(side);
         
         consecutiveWins++;
